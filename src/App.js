@@ -1,9 +1,13 @@
 import React from 'react';
-import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI';
 import './App.css';
-import CurrentlyReading from './components/CurrentlyReading.js';
+import BookItem from './components/BookItem.js';
 
 class BooksApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.changeShelf = this.changeShelf.bind(this);
+  }
   state = {
     /**
      * TODO: Instead of using this state variable to keep track of which page
@@ -12,19 +16,31 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false,
-    books:[]
+    books: [],
   };
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       this.setState({ books });
     });
   }
+  changeShelf(book) {
+    this.setState(state => {
+      let books=state.books.filter(c => c.id !== book.id);
+      return {
+        books: books.concat(book)
+      };
+    });
+  }
   render() {
-     console.log(this.state);
-  
-      let readingList=this.state.books.filter((book)=> book.shelf==="currentlyReading");
-      let wantToReadList=this.state.books.filter((book)=> book.shelf==="wantToRead");
-      let readList=this.state.books.filter((book)=> book.shelf==="read");
+    console.log(this.state);
+
+    let readingList = this.state.books.filter(
+      book => book.shelf === 'currentlyReading'
+    );
+    let wantToReadList = this.state.books.filter(
+      book => book.shelf === 'wantToRead'
+    );
+    let readList = this.state.books.filter(book => book.shelf === 'read');
 
     return (
       <div className="app">
@@ -62,15 +78,27 @@ class BooksApp extends React.Component {
               <div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
-                  <CurrentlyReading shelf={'currentlyReading'} books={readingList}/>
+                  <BookItem
+                    shelf={'currentlyReading'}
+                    books={readingList}
+                    changeShelf={this.changeShelf}
+                  />
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
-                  <CurrentlyReading shelf={'wantToRead'} books={wantToReadList}/>
+                  <BookItem
+                    shelf={'wantToRead'}
+                    books={wantToReadList}
+                    changeShelf={this.changeShelf}
+                  />
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
-                  <CurrentlyReading shelf={'read'} books={readList}/>
+                  <BookItem
+                    shelf={'read'}
+                    books={readList}
+                    changeShelf={this.changeShelf}
+                  />
                 </div>
               </div>
             </div>

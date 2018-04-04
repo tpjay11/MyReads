@@ -1,6 +1,6 @@
 import React from 'react';
 
-class CurrentlyReading extends React.Component {
+class BookItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: this.props.shelf };
@@ -32,7 +32,9 @@ class CurrentlyReading extends React.Component {
                         value={this.state.value}
                         onChange={event => {
                           console.log(event.target.value);
-                          console.log(book);
+                          console.log(book.id);
+                          book.shelf=event.target.value;
+                          this.props.changeShelf(book);
                         }}
                       >
                         <option value="none" disabled>
@@ -59,4 +61,4 @@ class CurrentlyReading extends React.Component {
   }
 }
 
-export default CurrentlyReading;
+export default BookItem;
