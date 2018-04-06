@@ -1,6 +1,7 @@
 import React from 'react';
 import BookItem from './BookItem';
 import * as BooksAPI from '../BooksAPI';
+import { Link} from 'react-router-dom';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -20,12 +21,12 @@ class SearchBar extends React.Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a
+          <Link
             className="close-search"
-            onClick={() => this.props.hideSearchPage()}
+            to="/"
           >
             Close
-          </a>
+          </Link>
           <div className="search-books-input-wrapper">
             <input
               type="text"
