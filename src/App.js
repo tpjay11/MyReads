@@ -2,11 +2,14 @@ import React from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import BookItem from './components/BookItem.js';
+import SearchBar from './components/SearchBar.js';
 
 class BooksApp extends React.Component {
   constructor(props) {
     super(props);
     this.changeShelf = this.changeShelf.bind(this);
+    this.deleteBook = this.deleteBook.bind(this);
+    this.hideSearchPage = this.hideSearchPage.bind(this);
   }
   state = {
     /**
@@ -23,17 +26,26 @@ class BooksApp extends React.Component {
       this.setState({ books });
     });
   }
+  hideSearchPage() {
+    this.setState({ showSearchPage: false });
+  }
   changeShelf(book) {
     this.setState(state => {
-      let books=state.books.filter(c => c.id !== book.id);
+      let books = state.books.filter(c => c.id !== book.id);
+      BooksAPI.update(book, book.shelf);
       return {
-        books: books.concat(book)
+        books: books.concat(book),
       };
     });
   }
-  render() {
-    console.log(this.state);
+  deleteBook(book) {
+    BooksAPI.update(book, 'none');
+    BooksAPI.getAll().then(books => {
+      this.setState({ books });
+    });
+  }
 
+  render() {
     let readingList = this.state.books.filter(
       book => book.shelf === 'currentlyReading'
     );
@@ -41,34 +53,14 @@ class BooksApp extends React.Component {
       book => book.shelf === 'wantToRead'
     );
     let readList = this.state.books.filter(book => book.shelf === 'read');
-
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <a
-                className="close-search"
-                onClick={() => this.setState({ showSearchPage: false })}
-              >
-                Close
-              </a>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author" />
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid" />
-            </div>
-          </div>
+          <SearchBar
+            hideSearchPage={this.hideSearchPage}
+            allBooks={this.state.books}
+            addToShelf={this.changeShelf}
+          />
         ) : (
           <div className="list-books">
             <div className="list-books-title">
@@ -78,27 +70,33 @@ class BooksApp extends React.Component {
               <div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
-                  <BookItem
-                    shelf={'currentlyReading'}
-                    books={readingList}
-                    changeShelf={this.changeShelf}
-                  />
+                  <div className="bookshelf-books">
+                    <BookItem
+                      books={readingList}
+                      changeShelf={this.changeShelf}
+                      deleteBook={this.deleteBook}
+                    />
+                  </div>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
-                  <BookItem
-                    shelf={'wantToRead'}
-                    books={wantToReadList}
-                    changeShelf={this.changeShelf}
-                  />
+                  <div className="bookshelf-books">
+                    <BookItem
+                      books={wantToReadList}
+                      changeShelf={this.changeShelf}
+                      deleteBook={this.deleteBook}
+                    />
+                  </div>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
-                  <BookItem
-                    shelf={'read'}
-                    books={readList}
-                    changeShelf={this.changeShelf}
-                  />
+                  <div className="bookshelf-books">
+                    <BookItem
+                      books={readList}
+                      changeShelf={this.changeShelf}
+                      deleteBook={this.deleteBook}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
