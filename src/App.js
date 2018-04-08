@@ -9,7 +9,6 @@ class BooksApp extends React.Component {
   constructor(props) {
     super(props);
     this.changeShelf = this.changeShelf.bind(this);
-    this.deleteBook = this.deleteBook.bind(this);
   }
   state = {
     books: [],
@@ -26,12 +25,6 @@ class BooksApp extends React.Component {
       return {
         books: books.concat(book),
       };
-    });
-  }
-  deleteBook(book) {
-    BooksAPI.update(book, 'none');
-    BooksAPI.getAll().then(books => {
-      this.setState({ books });
     });
   }
 
@@ -72,7 +65,6 @@ class BooksApp extends React.Component {
                       <BookItem
                         books={readingList}
                         changeShelf={this.changeShelf}
-                        deleteBook={this.deleteBook}
                       />
                     </div>
                   </div>
@@ -82,7 +74,6 @@ class BooksApp extends React.Component {
                       <BookItem
                         books={wantToReadList}
                         changeShelf={this.changeShelf}
-                        deleteBook={this.deleteBook}
                       />
                     </div>
                   </div>
@@ -92,7 +83,6 @@ class BooksApp extends React.Component {
                       <BookItem
                         books={readList}
                         changeShelf={this.changeShelf}
-                        deleteBook={this.deleteBook}
                       />
                     </div>
                   </div>

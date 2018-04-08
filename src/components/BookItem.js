@@ -34,11 +34,7 @@ class BookItem extends React.Component {
                       value={book.shelf || 'empty'}
                       onChange={event => {
                         book.shelf = event.target.value;
-                        if (event.target.value === 'none') {
-                          this.props.deleteBook(book);
-                        } else {
-                          this.props.changeShelf(book);
-                        }
+                        this.props.changeShelf(book);
                       }}
                     >
                       <option value="empty" disabled>

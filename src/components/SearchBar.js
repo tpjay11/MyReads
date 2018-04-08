@@ -2,6 +2,7 @@ import React from 'react';
 import BookItem from './BookItem';
 import * as BooksAPI from '../BooksAPI';
 import { Link} from 'react-router-dom';
+import * as _ from 'lodash';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -11,12 +12,14 @@ class SearchBar extends React.Component {
       query: '',
     };
   }
-  updateQuery = query => {
-    this.setState({ query: query.trim() });
-    BooksAPI.search(query).then(querybooks => {
-      this.setState({ querybooks });
-    });
-  };
+  updateQuery =_.debounce(
+    query => {
+        this.setState({ query: query.trim() });
+        BooksAPI.search(query).then(querybooks => {
+          this.setState({ querybooks });
+        });
+      },100
+  );
   render() {
     return (
       <div className="search-books">
