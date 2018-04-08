@@ -36,6 +36,7 @@ class BooksApp extends React.Component {
       book => book.shelf === 'wantToRead'
     );
     let readList = this.state.books.filter(book => book.shelf === 'read');
+    let info=[{shelf:'Currently Reading',list:readingList},{shelf:'Want to Read',list:wantToReadList},{shelf:'Read',list:readList}]
     return (
       <div className="app">
         <Route
@@ -58,35 +59,19 @@ class BooksApp extends React.Component {
                 <h1>MyReads</h1>
               </div>
               <div className="list-books-content">
-                <div>
-                  <div className="bookshelf">
-                    <h2 className="bookshelf-title">Currently Reading</h2>
+              {info.map((book)=>{
+                return (
+                  <div className="bookshelf" key={book.shelf}>
+                    <h2 className="bookshelf-title">{book.shelf}</h2>
                     <div className="bookshelf-books">
                       <BookItem
-                        books={readingList}
+                        books={book.list}
                         changeShelf={this.changeShelf}
                       />
                     </div>
                   </div>
-                  <div className="bookshelf">
-                    <h2 className="bookshelf-title">Want to Read</h2>
-                    <div className="bookshelf-books">
-                      <BookItem
-                        books={wantToReadList}
-                        changeShelf={this.changeShelf}
-                      />
-                    </div>
-                  </div>
-                  <div className="bookshelf">
-                    <h2 className="bookshelf-title">Read</h2>
-                    <div className="bookshelf-books">
-                      <BookItem
-                        books={readList}
-                        changeShelf={this.changeShelf}
-                      />
-                    </div>
-                  </div>
-                </div>
+                )
+              })}
               </div>
               <div className="open-search">
               <Link to="/search">Add a book</Link>
