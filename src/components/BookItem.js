@@ -4,8 +4,8 @@ class BookItem extends React.Component {
   render() {
     let books = this.props.books;
     let allBooks = this.props.allBooks;
-    if(!(books instanceof Array)){
-      books=[];
+    if (!(books instanceof Array)) {
+      books = [];
     }
     return (
       <ol className="books-grid">
@@ -17,6 +17,11 @@ class BookItem extends React.Component {
               }
             });
           }
+          const thumbnail = book.imageLinks
+            ? book.imageLinks.thumbnail
+            : 'https://vignette.wikia.nocookie.net/theannoyingroleplayers/images/4/47/Placeholder.png/revision/latest/scale-to-width-down/480?cb=20140715205720';
+          const title = book.title || 'none';
+          const authors = book.authors || 'none';
           return (
             <li key={book.id}>
               <div className="book">
@@ -26,7 +31,7 @@ class BookItem extends React.Component {
                     style={{
                       width: 128,
                       height: 193,
-                      backgroundImage: `url(${book.imageLinks.thumbnail})`,
+                      backgroundImage: `url(${thumbnail})`,
                     }}
                   />
                   <div className="book-shelf-changer">
@@ -49,8 +54,8 @@ class BookItem extends React.Component {
                     </select>
                   </div>
                 </div>
-                <div className="book-title">{book.title}</div>
-                <div className="book-authors">{book.authors}</div>
+                <div className="book-title">{title}</div>
+                <div className="book-authors">{authors}</div>
               </div>
             </li>
           );
