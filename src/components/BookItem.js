@@ -1,9 +1,8 @@
 import React from 'react';
 
-class BookItem extends React.Component {
-  render() {
-    let books = this.props.books;
-    let allBooks = this.props.allBooks;
+function BookItem(props) {
+    let books =props.books;
+    let allBooks =props.allBooks;
     if (!(books instanceof Array)) {
       books = [];
     }
@@ -39,7 +38,7 @@ class BookItem extends React.Component {
                       value={book.shelf || 'empty'}
                       onChange={event => {
                         book.shelf = event.target.value;
-                        this.props.changeShelf(book);
+                        props.changeShelf(book);
                       }}
                     >
                       <option value="empty" disabled>
@@ -62,7 +61,6 @@ class BookItem extends React.Component {
         })}
       </ol>
     );
-  }
 }
 
 export default BookItem;
